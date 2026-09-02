@@ -11,6 +11,7 @@ import {
 } from "@/actions/Laravel/Passkeys/Http/Controllers/PasskeyConfirmationController";
 import PasskeyVerify from "@/components/passkey-verify";
 import RequiredLabel from "@/components/required-label";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
 export default function ConfirmPassword() {
     return (
@@ -30,11 +31,11 @@ export default function ConfirmPassword() {
             <Form {...store.form()} resetOnSuccess={["password"]}>
                 {({ processing, errors }) => (
                     <div className="space-y-6">
-                        <div className="grid gap-2">
-                            <Label htmlFor="password">
+                        <Field>
+                            <FieldLabel htmlFor="password">
                                 Kata sandi
                                 <RequiredLabel />
-                            </Label>
+                            </FieldLabel>
                             <PasswordInput
                                 id="password"
                                 name="password"
@@ -43,8 +44,8 @@ export default function ConfirmPassword() {
                                 autoFocus
                             />
 
-                            <InputError message={errors.password} />
-                        </div>
+                            <FieldError>{errors.password}</FieldError>
+                        </Field>
 
                         <div className="flex items-center">
                             <Button

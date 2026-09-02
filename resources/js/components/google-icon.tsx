@@ -3,5 +3,5 @@ interface Props {
 }
 
 export default function GoogleIcon({ className }: Props) {
-    return <img src="/google-icon.png" className={className} />;
+    return <img src="/google-icon.png" alt="Gmail" className={className} />;
 }

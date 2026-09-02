@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RegionController;
 use App\Http\Controllers\Settings\AddressController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
@@ -30,7 +31,35 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('settings/appearance', 'settings/appearance')->name('appearance.edit');
 
     // ADDRESS
-    Route::get('settings/address', [AddressController::class, 'index'])->name('address.index');
+    Route::middleware('auth')->prefix('settings/address')->name('address.')->group(function () {
+        Route::get('/', [AddressController::class, 'index'])
+            ->name('index');
+
+        Route::get('/create', [AddressController::class, 'create'])
+            ->name('create');
+
+        Route::post('/', [AddressController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{address}/edit', [AddressController::class, 'edit'])
+            ->name('edit');
+
+        Route::put('/{address}', [AddressController::class, 'update'])
+            ->name('update');
+
+        Route::patch('/{address}/primary', [AddressController::class, 'setPrimary'])
+            ->name('primary');
+
+        Route::delete('/{address}', [AddressController::class, 'destroy'])
+            ->name('destroy');
+    });
+    // Route::get('settings/address', [AddressController::class, 'index'])->name('address.index');
+    // Route::get('settings/address/create', [AddressController::class, 'create'])->name('address.create');
+    // Route::post('settings/address', [AddressController::class, 'store'])->name('address.store');
+
+    Route::get('/regions/{province}/regencies', [RegionController::class, 'regencies']);
+    Route::get('/regions/{regency}/districts', [RegionController::class, 'districts']);
+    Route::get('/regions/{district}/villages', [RegionController::class, 'villages']);
 });
 
 Route::get('.well-known/passkey-endpoints', function () {

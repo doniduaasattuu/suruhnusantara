@@ -11,6 +11,8 @@ import type { NavItem } from "@/types";
 interface SectionLayoutProps extends PropsWithChildren {
     title: string;
     description?: string;
+    className?: string;
+    contentClassName?: string;
     navigation: NavItem[];
 }
 
@@ -18,6 +20,8 @@ export default function SectionLayout({
     title,
     description,
     navigation,
+    className,
+    contentClassName,
     children,
 }: SectionLayoutProps) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
@@ -56,8 +60,10 @@ export default function SectionLayout({
 
                 <Separator className="my-6 lg:hidden" />
 
-                <div className="flex-1 md:max-w-2xl">
-                    <section className="max-w-xl space-y-12">
+                <div className={cn("flex-1 md:max-w-xl", className)}>
+                    <section
+                        className={cn("space-y-12 max-w-xl", contentClassName)}
+                    >
                         {children}
                     </section>
                 </div>

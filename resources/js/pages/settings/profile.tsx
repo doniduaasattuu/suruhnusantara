@@ -3,14 +3,13 @@ import { Link } from "@inertiajs/react";
 import ProfileController from "@/actions/App/Http/Controllers/Settings/ProfileController";
 import DeleteUser from "@/components/delete-user";
 import Heading from "@/components/heading";
-import InputError from "@/components/input-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { edit } from "@/routes/profile";
 import type { Auth } from "@/types";
 import { send } from "@/routes/verification";
 import RequiredLabel from "@/components/required-label";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
 type PageProps = {
     auth: Auth;
@@ -47,15 +46,14 @@ export default function Profile({
                 >
                     {({ processing, errors }) => (
                         <>
-                            <div className="grid gap-2">
-                                <Label htmlFor="name">
+                            <Field>
+                                <FieldLabel htmlFor="name">
                                     Nama lengkap
                                     <RequiredLabel />
-                                </Label>
+                                </FieldLabel>
 
                                 <Input
                                     id="name"
-                                    className="mt-1 block w-full"
                                     defaultValue={auth.user.name}
                                     name="name"
                                     required
@@ -63,22 +61,18 @@ export default function Profile({
                                     placeholder="Full name"
                                 />
 
-                                <InputError
-                                    className="mt-2"
-                                    message={errors.name}
-                                />
-                            </div>
+                                <FieldError>{errors.name}</FieldError>
+                            </Field>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">
+                            <Field>
+                                <FieldLabel htmlFor="email">
                                     Alamat email
                                     <RequiredLabel />
-                                </Label>
+                                </FieldLabel>
 
                                 <Input
                                     id="email"
                                     type="email"
-                                    className="mt-1 block w-full"
                                     defaultValue={auth.user.email}
                                     name="email"
                                     required
@@ -86,11 +80,8 @@ export default function Profile({
                                     placeholder="Email address"
                                 />
 
-                                <InputError
-                                    className="mt-2"
-                                    message={errors.email}
-                                />
-                            </div>
+                                <FieldError>{errors.email}</FieldError>
+                            </Field>
 
                             {mustVerifyEmail &&
                                 auth.user.email_verified_at === null && (

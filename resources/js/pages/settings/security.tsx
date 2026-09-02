@@ -11,6 +11,8 @@ import type { Props as ManagePasskeysProps } from "@/components/manage-passkeys"
 import ManagePasskeys from "@/components/manage-passkeys";
 import type { Props as ManageTwoFactorProps } from "@/components/manage-two-factor";
 import ManageTwoFactor from "@/components/manage-two-factor";
+import RequiredLabel from "@/components/required-label";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
 // oxfmt-ignore
 type Props = {
@@ -61,59 +63,61 @@ export default function Security(props: Props) {
                 >
                     {({ errors, processing }) => (
                         <>
-                            <div className="grid gap-2">
-                                <Label htmlFor="current_password">
+                            <Field>
+                                <FieldLabel htmlFor="current_password">
                                     Kata sandi saat ini
-                                </Label>
+                                    <RequiredLabel />
+                                </FieldLabel>
 
                                 <PasswordInput
                                     id="current_password"
                                     ref={currentPasswordInput}
                                     name="current_password"
-                                    className="mt-1 block w-full"
                                     autoComplete="current-password"
                                     placeholder="Kata sandi saat ini"
                                 />
 
-                                <InputError message={errors.current_password} />
-                            </div>
+                                <FieldError>
+                                    {errors.current_password}
+                                </FieldError>
+                            </Field>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">
+                                <FieldLabel htmlFor="password">
                                     Kata sandi baru
-                                </Label>
+                                    <RequiredLabel />
+                                </FieldLabel>
 
                                 <PasswordInput
                                     id="password"
                                     ref={passwordInput}
                                     name="password"
-                                    className="mt-1 block w-full"
                                     autoComplete="new-password"
                                     placeholder="Kata sandi baru"
                                     passwordrules={props.passwordRules}
                                 />
 
-                                <InputError message={errors.password} />
+                                <FieldError>{errors.password}</FieldError>
                             </div>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="password_confirmation">
+                            <Field>
+                                <FieldLabel htmlFor="password_confirmation">
                                     Konfirmasi kata sandi
-                                </Label>
+                                    <RequiredLabel />
+                                </FieldLabel>
 
                                 <PasswordInput
                                     id="password_confirmation"
                                     name="password_confirmation"
-                                    className="mt-1 block w-full"
                                     autoComplete="new-password"
                                     placeholder="Konfirmasi kata sandi"
                                     passwordrules={props.passwordRules}
                                 />
 
-                                <InputError
-                                    message={errors.password_confirmation}
-                                />
-                            </div>
+                                <FieldError>
+                                    {errors.password_confirmation}
+                                </FieldError>
+                            </Field>
 
                             <div className="flex items-center gap-4">
                                 <Button

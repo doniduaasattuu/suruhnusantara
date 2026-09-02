@@ -1,18 +1,19 @@
-import { Head, usePage } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import Heading from "@/components/heading";
 import { Button } from "@/components/ui/button";
-import type { Auth } from "@/types";
+import type { Address } from "@/types";
 import { Plus } from "lucide-react";
 import TooltipWrapper from "@/components/tooltip-wrapper";
 import AddressCard from "@/components/address-card";
+import { create as createAddress } from "@/routes/address";
 
-type PageProps = {
-    auth: Auth;
+export type Props = {
+    addresses: {
+        data: Address[];
+    };
 };
 
-export default function Address() {
-    const { auth } = usePage<PageProps>().props;
-
+export default function Index({ addresses }: Props) {
     return (
         <>
             <Head title="Pengaturan alamat" />
@@ -27,11 +28,11 @@ export default function Address() {
                         description="Perbarui atau tambah alamat Anda"
                     />
                     {/* Button tambah alamat */}
-                    <TooltipWrapper
-                        content={<p>Tambah alamat</p>}
-                        key={"tambah_alamat"}
-                    >
-                        <Button variant="outline">
+                    <TooltipWrapper content={<p>Tambah alamat</p>}>
+                        <Button
+                            variant="outline"
+                            onClick={() => router.get(createAddress())}
+                        >
                             <Plus />
                             Tambah
                         </Button>
@@ -40,20 +41,16 @@ export default function Address() {
 
                 {/* Daftar alamat */}
                 <div className="flex flex-col space-y-4">
-                    <AddressCard
-                        label="Rumah"
-                        phone="+628983456945"
-                        isPrimary={true}
-                        name="Doni Darmawan"
-                    />
-                    <AddressCard
-                        label="Kantor"
-                        phone="+628983456945"
-                        isPrimary={false}
-                        name="Doni Darmawan"
-                    />
+                    {addresses.data.map((address: Address, index) => {
+                        return <AddressCard key={index} address={address} />;
+                    })}
                 </div>
             </div>
         </>
     );
 }
+
+Index.layout = {
+    className: "md:max-w-3xl",
+    contentClassName: "max-w-3xl",
+};

@@ -11,6 +11,7 @@ import { store } from "@/routes/register";
 import RequiredLabel from "@/components/required-label";
 import GoogleButton from "@/components/google-button";
 import { SeparatorWithText } from "@/components/separator-with-text";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
 type Props = {
     passwordRules: string;
@@ -33,11 +34,11 @@ export default function Register({ passwordRules }: Props) {
                         <SeparatorWithText text="Atau daftar dengan email" />
 
                         <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="name">
+                            <Field>
+                                <FieldLabel htmlFor="name">
                                     Nama lengkap
                                     <RequiredLabel />
-                                </Label>
+                                </FieldLabel>
                                 <Input
                                     id="name"
                                     type="text"
@@ -48,17 +49,14 @@ export default function Register({ passwordRules }: Props) {
                                     name="name"
                                     placeholder="Nama lengkap"
                                 />
-                                <InputError
-                                    message={errors.name}
-                                    className="mt-2"
-                                />
-                            </div>
+                                <FieldError>{errors.name}</FieldError>
+                            </Field>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">
+                            <Field>
+                                <FieldLabel htmlFor="email">
                                     Alamat email
                                     <RequiredLabel />
-                                </Label>
+                                </FieldLabel>
                                 <Input
                                     id="email"
                                     type="email"
@@ -68,14 +66,14 @@ export default function Register({ passwordRules }: Props) {
                                     name="email"
                                     placeholder="email@suruhnusantara.org"
                                 />
-                                <InputError message={errors.email} />
-                            </div>
+                                <FieldError>{errors.email}</FieldError>
+                            </Field>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="password">
+                            <Field>
+                                <FieldLabel htmlFor="password">
                                     Kata sandi
                                     <RequiredLabel />
-                                </Label>
+                                </FieldLabel>
                                 <PasswordInput
                                     id="password"
                                     required
@@ -85,14 +83,14 @@ export default function Register({ passwordRules }: Props) {
                                     placeholder="Kata sandi"
                                     passwordrules={passwordRules}
                                 />
-                                <InputError message={errors.password} />
-                            </div>
+                                <FieldError>{errors.password}</FieldError>
+                            </Field>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="password_confirmation">
+                            <Field>
+                                <FieldLabel htmlFor="password_confirmation">
                                     Konfirmasi kata sandi
                                     <RequiredLabel />
-                                </Label>
+                                </FieldLabel>
                                 <PasswordInput
                                     id="password_confirmation"
                                     required
@@ -102,10 +100,10 @@ export default function Register({ passwordRules }: Props) {
                                     placeholder="Konfirmasi kata sandi"
                                     passwordrules={passwordRules}
                                 />
-                                <InputError
-                                    message={errors.password_confirmation}
-                                />
-                            </div>
+                                <FieldError>
+                                    {errors.password_confirmation}
+                                </FieldError>
+                            </Field>
 
                             <Button
                                 type="submit"

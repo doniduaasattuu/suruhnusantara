@@ -14,6 +14,7 @@ import PasskeyVerify from "@/components/passkey-verify";
 import RequiredLabel from "@/components/required-label";
 import GoogleButton from "@/components/google-button";
 import { SeparatorWithText } from "@/components/separator-with-text";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
 type Props = {
     status?: string;
@@ -39,11 +40,12 @@ export default function Login({ status, canResetPassword = false }: Props) {
                         <SeparatorWithText text="Atau masuk dengan email" />
 
                         <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">
+                            <Field>
+                                <FieldLabel htmlFor="email">
                                     Alamat email
                                     <RequiredLabel />
-                                </Label>
+                                </FieldLabel>
+
                                 <Input
                                     id="email"
                                     type="email"
@@ -54,16 +56,16 @@ export default function Login({ status, canResetPassword = false }: Props) {
                                     autoComplete="email"
                                     placeholder="email@suruhnusantara.org"
                                 />
-                                <InputError message={errors.email} />
-                            </div>
+                                <FieldError>{errors.email}</FieldError>
+                            </Field>
 
-                            <div className="grid gap-2">
+                            <Field>
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">
+                                    <FieldLabel htmlFor="password">
                                         Kata sandi
                                         <RequiredLabel />
-                                    </Label>
-                                    {canResetPassword && (
+                                    </FieldLabel>
+                                    {true && (
                                         <TextLink
                                             href={request()}
                                             className="ml-auto text-sm"
@@ -81,8 +83,8 @@ export default function Login({ status, canResetPassword = false }: Props) {
                                     autoComplete="current-password"
                                     placeholder="Kata sandi"
                                 />
-                                <InputError message={errors.password} />
-                            </div>
+                                <FieldError>{errors.password}</FieldError>
+                            </Field>
 
                             <div className="flex items-center space-x-3">
                                 <Checkbox
