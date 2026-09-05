@@ -108,14 +108,6 @@ class AddressController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(
@@ -212,12 +204,9 @@ class AddressController extends Controller
         Request $request,
         Address $address
     ): RedirectResponse {
-        $user = $request->user();
+        Gate::authorize('update', $address);
 
-        abort_unless(
-            $address->user_id === $user->id,
-            404
-        );
+        $user = $request->user();
 
         DB::transaction(function () use ($user, $address) {
             $user->newQuery()

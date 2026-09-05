@@ -15,6 +15,8 @@ import {
     primary as setPrimaryAddress,
 } from "@/routes/address";
 import { Switch } from "./ui/switch";
+import { Badge } from "./ui/badge";
+import { cn } from "@/lib/utils";
 
 interface AddressCardProps {
     address: Address;
@@ -22,7 +24,11 @@ interface AddressCardProps {
 
 export default function AddressCard({ address }: AddressCardProps) {
     return (
-        <Card className="w-full">
+        <Card
+            className={
+                address.is_primary ? "border border-foreground" : undefined
+            }
+        >
             <CardHeader>
                 <CardTitle className="text-sm font-medium">
                     {address.label}
@@ -45,44 +51,46 @@ export default function AddressCard({ address }: AddressCardProps) {
                 </p>
 
                 {address.notes && (
-                    <p className="mt-2 text-sm text-muted-foreground">
+                    <p className="mt-1 text-sm text-muted-foreground/80">
                         Catatan: {address.notes}
                     </p>
                 )}
             </CardContent>
 
             <CardFooter className="flex justify-between gap-2">
-                <div className="flex items-center gap-3">
-                    <Switch
-                        id={`primary-${address.id}`}
-                        checked={address.is_primary}
-                        disabled={address.is_primary}
-                        onCheckedChange={(checked) => {
-                            if (!checked) {
-                                return;
-                            }
+                {address.is_primary ? (
+                    <Badge>Utama</Badge>
+                ) : (
+                    <div className="flex items-center gap-3">
+                        <Switch
+                            id={`primary-${address.id}`}
+                            checked={address.is_primary}
+                            disabled={address.is_primary}
+                            onCheckedChange={(checked) => {
+                                if (!checked) {
+                                    return;
+                                }
 
-                            router.patch(
-                                setPrimaryAddress(address.id),
-                                {},
-                                {
-                                    preserveState: true,
-                                    preserveScroll: true,
-                                },
-                            );
-                        }}
-                        className="cursor-pointer"
-                    />
+                                router.patch(
+                                    setPrimaryAddress(address.id),
+                                    {},
+                                    {
+                                        preserveState: true,
+                                        preserveScroll: true,
+                                    },
+                                );
+                            }}
+                            className="cursor-pointer"
+                        />
 
-                    <label
-                        htmlFor={`primary-${address.id}`}
-                        className="text-sm font-medium cursor-pointer"
-                    >
-                        {address.is_primary
-                            ? "Alamat utama"
-                            : "Jadikan sebagai alamat utama"}
-                    </label>
-                </div>
+                        <label
+                            htmlFor={`primary-${address.id}`}
+                            className="text-sm font-medium cursor-pointer"
+                        >
+                            Jadikan sebagai alamat utama
+                        </label>
+                    </div>
+                )}
 
                 <div className="flex gap-1">
                     <Button

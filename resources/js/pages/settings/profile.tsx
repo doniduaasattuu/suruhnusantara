@@ -10,6 +10,17 @@ import type { Auth } from "@/types";
 import { send } from "@/routes/verification";
 import RequiredLabel from "@/components/required-label";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useInitials } from "@/hooks/use-initials";
+import FieldWrapper from "@/components/field-wrapper";
 
 type PageProps = {
     auth: Auth;
@@ -23,6 +34,7 @@ export default function Profile({
     status?: string;
 }) {
     const { auth } = usePage<PageProps>().props;
+    const getInitials = useInitials();
 
     return (
         <>
@@ -43,51 +55,96 @@ export default function Profile({
                         preserveScroll: true,
                     }}
                     className="space-y-6"
+                    resetOnSuccess={["avatar"]}
                 >
                     {({ processing, errors }) => (
                         <>
+                            {/* Avatar */}
                             <Field>
-                                <FieldLabel htmlFor="name">
-                                    Nama lengkap
-                                    <RequiredLabel />
+                                <FieldLabel htmlFor="avatar">
+                                    Foto profil
                                 </FieldLabel>
 
-                                <Input
-                                    id="name"
-                                    defaultValue={auth.user.name}
-                                    name="name"
-                                    required
-                                    autoComplete="name"
-                                    placeholder="Full name"
-                                />
+                                <div className="flex items-center gap-4">
+                                    <Avatar className="size-20">
+                                        <AvatarImage
+                                            className="aspect-square h-full w-full object-cover"
+                                            src={
+                                                auth.user.avatar_url ??
+                                                undefined
+                                            }
+                                            alt={auth.user.name}
+                                        />
 
-                                <FieldError>{errors.name}</FieldError>
+                                        <AvatarFallback className="text-lg">
+                                            {getInitials(auth.user?.name ?? "")}
+                                        </AvatarFallback>
+                                    </Avatar>
+
+                                    <div className="space-y-2">
+                                        <Input
+                                            id="avatar"
+                                            type="file"
+                                            name="avatar"
+                                            accept="image/jpeg,image/png,image/webp"
+                                        />
+
+                                        <p className="text-muted-foreground text-xs">
+                                            JPG, PNG, atau WebP. Maksimal 2 MB.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <FieldError>{errors.avatar}</FieldError>
                             </Field>
 
-                            <Field>
-                                <FieldLabel htmlFor="email">
-                                    Alamat email
-                                    <RequiredLabel />
-                                </FieldLabel>
+                            <FieldWrapper className="sm:grid-cols-2">
+                                {/* Nama */}
+                                <Field>
+                                    <FieldLabel htmlFor="name">
+                                        Nama lengkap
+                                        <RequiredLabel />
+                                    </FieldLabel>
 
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    defaultValue={auth.user.email}
-                                    name="email"
-                                    required
-                                    autoComplete="username"
-                                    placeholder="Email address"
-                                />
+                                    <Input
+                                        id="name"
+                                        defaultValue={auth.user.name}
+                                        name="name"
+                                        required
+                                        autoComplete="name"
+                                        placeholder="Nama lengkap"
+                                    />
 
-                                <FieldError>{errors.email}</FieldError>
-                            </Field>
+                                    <FieldError>{errors.name}</FieldError>
+                                </Field>
 
+                                {/* Email */}
+                                <Field>
+                                    <FieldLabel htmlFor="email">
+                                        Alamat email
+                                        <RequiredLabel />
+                                    </FieldLabel>
+
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        defaultValue={auth.user.email}
+                                        name="email"
+                                        required
+                                        autoComplete="username"
+                                        placeholder="Alamat email"
+                                    />
+
+                                    <FieldError>{errors.email}</FieldError>
+                                </Field>
+                            </FieldWrapper>
+
+                            {/* Verifikasi Email */}
                             {mustVerifyEmail &&
                                 auth.user.email_verified_at === null && (
                                     <div>
-                                        <p className="text-muted-foreground -mt-4 text-sm">
-                                            Alamat email anda tidak
+                                        <p className="-mt-4 text-sm text-muted-foreground">
+                                            Alamat email Anda tidak
                                             terverifikasi.{" "}
                                             <Link
                                                 href={send()}
@@ -109,12 +166,101 @@ export default function Profile({
                                     </div>
                                 )}
 
+                            <FieldWrapper className="sm:grid-cols-3">
+                                {/* Nomor Telepon */}
+                                <Field>
+                                    <FieldLabel htmlFor="phone">
+                                        Nomor telepon
+                                        <RequiredLabel />
+                                    </FieldLabel>
+
+                                    <Input
+                                        id="phone"
+                                        type="tel"
+                                        defaultValue={auth.user.phone ?? ""}
+                                        name="phone"
+                                        autoComplete="tel"
+                                        placeholder="08xxxxxxxxxx"
+                                    />
+
+                                    <FieldError>{errors.phone}</FieldError>
+                                </Field>
+
+                                {/* Tanggal Lahir */}
+                                <Field>
+                                    <FieldLabel htmlFor="birth_date">
+                                        Tanggal lahir
+                                        <RequiredLabel />
+                                    </FieldLabel>
+
+                                    <Input
+                                        id="birth_date"
+                                        type="date"
+                                        defaultValue={
+                                            auth.user.birth_date ?? ""
+                                        }
+                                        name="birth_date"
+                                        autoComplete="bday"
+                                    />
+
+                                    <FieldError>{errors.birth_date}</FieldError>
+                                </Field>
+
+                                {/* Jenis Kelamin */}
+                                <Field>
+                                    <FieldLabel htmlFor="gender">
+                                        Jenis kelamin
+                                        <RequiredLabel />
+                                    </FieldLabel>
+
+                                    <Select
+                                        name="gender"
+                                        defaultValue={
+                                            auth.user.gender ?? undefined
+                                        }
+                                    >
+                                        <SelectTrigger id="gender">
+                                            <SelectValue placeholder="Pilih jenis kelamin" />
+                                        </SelectTrigger>
+
+                                        <SelectContent>
+                                            <SelectItem value="male">
+                                                Laki-laki
+                                            </SelectItem>
+
+                                            <SelectItem value="female">
+                                                Perempuan
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+
+                                    <FieldError>{errors.gender}</FieldError>
+                                </Field>
+                            </FieldWrapper>
+
+                            {/* Bio */}
+                            <Field>
+                                <FieldLabel htmlFor="bio">Bio</FieldLabel>
+
+                                <Textarea
+                                    id="bio"
+                                    name="bio"
+                                    defaultValue={auth.user.bio ?? ""}
+                                    placeholder="Ceritakan sedikit tentang diri Anda"
+                                    rows={4}
+                                />
+
+                                <FieldError>{errors.bio}</FieldError>
+                            </Field>
+
+                            {/* Submit */}
                             <div className="flex items-center gap-4">
                                 <Button
+                                    type="submit"
                                     disabled={processing}
                                     data-test="update-profile-button"
                                 >
-                                    Simpan
+                                    {processing ? "Menyimpan..." : "Simpan"}
                                 </Button>
                             </div>
                         </>
@@ -134,4 +280,6 @@ Profile.layout = {
             href: edit(),
         },
     ],
+    className: "md:max-w-3xl",
+    contentClassName: "max-w-3xl",
 };

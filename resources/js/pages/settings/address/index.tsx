@@ -2,7 +2,7 @@ import { Head, router } from "@inertiajs/react";
 import Heading from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import type { Address } from "@/types";
-import { Plus } from "lucide-react";
+import { Leaf, Plus } from "lucide-react";
 import TooltipWrapper from "@/components/tooltip-wrapper";
 import AddressCard from "@/components/address-card";
 import { create as createAddress } from "@/routes/address";
@@ -40,11 +40,22 @@ export default function Index({ addresses }: Props) {
                 </div>
 
                 {/* Daftar alamat */}
-                <div className="flex flex-col space-y-4">
-                    {addresses.data.map((address: Address, index) => {
-                        return <AddressCard key={index} address={address} />;
-                    })}
-                </div>
+                {addresses.data.length > 0 ? (
+                    <div className="flex flex-col space-y-4">
+                        {addresses.data.map((address: Address, index) => {
+                            return (
+                                <AddressCard key={index} address={address} />
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-muted-background p-6 text-center">
+                        <Leaf />
+                        <p className="text-sm text-muted-foreground">
+                            Anda belum menambahkan alamat.
+                        </p>
+                    </div>
+                )}
             </div>
         </>
     );

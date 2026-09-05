@@ -513,11 +513,11 @@ export default function AddressForm({ provinces, address }: AddressFormProps) {
                         <Button type="submit" disabled={processing}>
                             {processing
                                 ? isEdit
-                                    ? "Menyimpan perubahan..."
+                                    ? "Memperbarui..."
                                     : "Menyimpan..."
                                 : isEdit
-                                  ? "Simpan perubahan"
-                                  : "Simpan alamat"}
+                                  ? "Perbarui"
+                                  : "Simpan"}
                         </Button>
                     </div>
                 </>
