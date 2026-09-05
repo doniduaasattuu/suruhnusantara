@@ -18,14 +18,15 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 type Props = {
     status?: string;
     canResetPassword: boolean;
+    withPasskey: boolean;
 };
 
-export default function Login({ status, canResetPassword = false }: Props) {
+export default function Login({ status, withPasskey = false }: Props) {
     return (
         <>
             <Head title="Log in" />
 
-            <PasskeyVerify />
+            {withPasskey && <PasskeyVerify />}
 
             <Form
                 {...store.form()}

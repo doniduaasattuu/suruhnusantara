@@ -1,11 +1,5 @@
 import { Link, router, usePage } from "@inertiajs/react";
-import {
-    CalendarCheck,
-    LayoutGrid,
-    LogIn,
-    Menu,
-    ShoppingCart,
-} from "lucide-react";
+import { CalendarCheck, LogIn, Menu, ShoppingCart } from "lucide-react";
 import AppLogo from "@/components/app-logo";
 import AppLogoIcon from "@/components/app-logo-icon";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -47,11 +41,11 @@ type Props = {
 };
 
 const mainNavItems: NavItem[] = [
-    {
-        title: "Dashboard",
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
+    // {
+    //     title: "Dashboard",
+    //     href: dashboard(),
+    //     icon: LayoutGrid,
+    // },
 ];
 
 const rightNavItems: NavItem[] = [
