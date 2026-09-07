@@ -1,3 +1,5 @@
+import { Address } from "./address";
+
 export type User = {
     id: number;
     name: string;
@@ -12,11 +14,19 @@ export type User = {
     two_factor_enabled?: boolean;
     created_at: string;
     updated_at: string;
+    is_active: boolean;
+    last_login_at: string | null;
+    last_logout_at: string | null;
+    isAdministrator: boolean;
+    addresses: Address[];
+    primaryAddress?: Address;
     [key: string]: unknown;
 };
 
 export type Auth = {
     user: User;
+    roles: string[];
+    permissions: Record<string, boolean>;
 };
 
 export type Passkey = {

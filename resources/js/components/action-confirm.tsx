@@ -15,6 +15,7 @@ interface ActionConfirmProps {
     title?: string;
     description?: string;
     children: React.ReactNode | undefined;
+    cancelLabel?: string;
     actionLabel?: string;
 }
 
@@ -22,6 +23,7 @@ export function ActionConfirm({
     action,
     title,
     description,
+    cancelLabel,
     actionLabel,
     children,
 }: ActionConfirmProps) {
@@ -40,7 +42,7 @@ export function ActionConfirm({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel className="cursor-pointer">
-                        Batalkan
+                        {cancelLabel ?? "Batalkan"}
                     </AlertDialogCancel>
                     <AlertDialogAction
                         className="cursor-pointer"

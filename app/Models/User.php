@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Attributes\Appends;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -12,12 +13,14 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @property int $id
@@ -41,13 +44,16 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
     'bio',
     'birth_date',
     'gender',
+    'is_active',
+    'last_login_at',
+    'last_logout_at',
 ])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 #[Appends(['avatar_url'])]
 class User extends Authenticatable implements PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
+    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable, HasRoles;
 
     /**
      * Get the attributes that should be cast.
@@ -61,7 +67,23 @@ class User extends Authenticatable implements PasskeyUser
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
             'birth_date' => 'date:Y-m-d',
+            'last_login_at' => 'datetime',
+            'last_logout_at' => 'datetime',
         ];
+    }
+
+    #[Scope]
+    protected function scopeSearch(Builder $builder, Request $request): void
+    {
+        $search = trim($request->query('query'));
+        if ($search) {
+            $builder->where(function ($query) use ($search) {
+                $query
+                    ->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%")
+                    ->orWhere('phone', 'LIKE', "%{$search}%");
+            });
+        }
     }
 
     protected function avatarUrl(): Attribute
@@ -71,6 +93,11 @@ class User extends Authenticatable implements PasskeyUser
                 ? Storage::disk('public')->url($this->avatar)
                 : null
         );
+    }
+
+    public function isAdministrator(): bool
+    {
+        return $this->hasRole('administrator');
     }
 
     // RELATION

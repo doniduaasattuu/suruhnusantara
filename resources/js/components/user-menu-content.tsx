@@ -1,5 +1,5 @@
 import { Link, router } from "@inertiajs/react";
-import { Activity, LogOut, Settings } from "lucide-react";
+import { Activity, LayoutDashboard, LogOut, Settings } from "lucide-react";
 import {
     DropdownMenuGroup,
     DropdownMenuItem,
@@ -8,9 +8,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { UserInfo } from "@/components/user-info";
 import { useMobileNavigation } from "@/hooks/use-mobile-navigation";
-import { logout } from "@/routes";
+import { dashboard as publicDashboard, logout } from "@/routes";
+import { dashboard as administratorDashboard } from "@/routes/administrator";
 import { edit } from "@/routes/profile";
 import type { User } from "@/types";
+import { useCurrentUrl } from "@/hooks/use-current-url";
 
 type Props = {
     user: User;
@@ -23,6 +25,15 @@ export function UserMenuContent({ user }: Props) {
         cleanup();
         router.flushAll();
     };
+
+    const { currentUrl } = useCurrentUrl();
+
+    const dashboardLink = currentUrl.startsWith("/administrator")
+        ? publicDashboard
+        : administratorDashboard;
+    const labelDashboard = currentUrl.startsWith("/administrator")
+        ? "Publik"
+        : "Administrator";
 
     return (
         <>
@@ -55,6 +66,19 @@ export function UserMenuContent({ user }: Props) {
                         Aktivitas
                     </Link>
                 </DropdownMenuItem>
+                {user?.isAdministrator && (
+                    <DropdownMenuItem asChild>
+                        <Link
+                            className="block w-full cursor-pointer"
+                            href={dashboardLink()}
+                            prefetch
+                            onClick={cleanup}
+                        >
+                            <LayoutDashboard className="mr-2" />
+                            {labelDashboard}
+                        </Link>
+                    </DropdownMenuItem>
+                )}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>

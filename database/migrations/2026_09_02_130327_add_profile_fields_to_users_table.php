@@ -36,9 +36,13 @@ return new class extends Migration
                 ->nullable()
                 ->after('password');
 
+            $table->timestamp('last_logout_at')
+                ->nullable()
+                ->after('last_login_at');
+
             $table->boolean('is_active')
                 ->default(true)
-                ->after('last_login_at');
+                ->after('last_logout_at');
 
             $table->index('phone');
             $table->index('is_active');

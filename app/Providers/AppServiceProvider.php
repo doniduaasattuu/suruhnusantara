@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Auth\LoginResponse;
 use App\Models\Address;
 use App\Policies\AddressPolicy;
 use Carbon\CarbonImmutable;
@@ -28,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        Gate::before(function ($user, $ability) {
+            return $user->isAdministrator() ? true : null;
+        });
     }
 
     /**

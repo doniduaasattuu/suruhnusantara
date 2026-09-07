@@ -21,6 +21,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useInitials } from "@/hooks/use-initials";
 import FieldWrapper from "@/components/field-wrapper";
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+    InputGroupText,
+} from "@/components/ui/input-group";
 
 type PageProps = {
     auth: Auth;
@@ -174,14 +180,27 @@ export default function Profile({
                                         <RequiredLabel />
                                     </FieldLabel>
 
-                                    <Input
+                                    {/* <Input
                                         id="phone"
                                         type="tel"
                                         defaultValue={auth.user.phone ?? ""}
                                         name="phone"
                                         autoComplete="tel"
                                         placeholder="08xxxxxxxxxx"
-                                    />
+                                        /> */}
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            type="tel"
+                                            id="phone"
+                                            name="phone"
+                                            placeholder="example.com"
+                                            defaultValue={auth.user.phone ?? ""}
+                                            autoComplete="8xxxxxxxxxx"
+                                        />
+                                        <InputGroupAddon>
+                                            <InputGroupText>+62</InputGroupText>
+                                        </InputGroupAddon>
+                                    </InputGroup>
 
                                     <FieldError>{errors.phone}</FieldError>
                                 </Field>

@@ -16,7 +16,6 @@ import {
 } from "@/routes/address";
 import { Switch } from "./ui/switch";
 import { Badge } from "./ui/badge";
-import { cn } from "@/lib/utils";
 
 interface AddressCardProps {
     address: Address;

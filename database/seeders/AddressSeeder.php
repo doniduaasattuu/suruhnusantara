@@ -16,11 +16,7 @@ class AddressSeeder extends Seeder
     {
         DB::table('addresses')->truncate();
 
-        $users = User::query()
-            ->whereIn('email', [
-                'doni@gmail.com',
-            ])
-            ->get();
+        $users = User::limit(5)->get();
 
         foreach ($users as $user) {
             $village = \App\Models\Village::query()
